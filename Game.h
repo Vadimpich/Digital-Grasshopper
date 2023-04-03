@@ -1,0 +1,10 @@
+#ifndef DIGITAL_GRASSHOPPER_GAME_H
+#define DIGITAL_GRASSHOPPER_GAME_H
+
+
+class Game {
+
+};
+
+
+#endif //DIGITAL_GRASSHOPPER_GAME_H
