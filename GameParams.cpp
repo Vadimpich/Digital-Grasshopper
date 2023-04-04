@@ -1,8 +1,9 @@
 #include <iostream>
 #include "GameParams.h"
+
 using namespace std;
 
-class GameParams{
+class GameParams {
 
 private:
     int rowCount;
@@ -10,16 +11,10 @@ private:
     int diff;
 
 public:
-    GameParams(int rowCount, int colCount, int diff) {                                                         ?
+    explicit GameParams(int rowCount = 6, int colCount = 6, int diff = 1) {
         this->rowCount = rowCount;
         this->colCount = colCount;
         this->diff = diff;
-    }
-
-    GameParams() {
-        this->rowCount = 6;
-        this->colCount = 6;
-        this->diff = 1;
     }
 
     int getColCount() {
