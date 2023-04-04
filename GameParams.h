@@ -2,9 +2,4 @@
 #define DIGITAL_GRASSHOPPER_GAMEPARAMS_H
 
 
-class GameParams {
-
-};
-
-
 #endif //DIGITAL_GRASSHOPPER_GAMEPARAMS_H
