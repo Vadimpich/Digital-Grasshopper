@@ -179,4 +179,138 @@ public:
         }
     }
 
+
+    vector<int> genNumbers(int rowCount, int colCount, int diff) {
+        vector<int> cells = vector<int>();
+        vector<Number> numbers = vector<Number>();
+        int count = rowCount * colCount;
+        switch (diff) {
+            case 1:
+                numbers.emplace_back(2, 0.40);
+                numbers.emplace_back(3, 0.14);
+                numbers.emplace_back(4, 0.03);
+                break;
+            case 2:
+                numbers.emplace_back(2, 0.22);
+                numbers.emplace_back(1, 0.16);
+                numbers.emplace_back(3, 0.28);
+                numbers.emplace_back(4, 0.06);
+                break;
+            case 3:
+                numbers.emplace_back(2, 0.33);
+                numbers.emplace_back(1, 0.42);
+                numbers.emplace_back(3, 0.05);
+                numbers.emplace_back(4, 0.08);
+                break;
+            default:
+                break;
+        }
+        for (Number num: numbers) {
+            for (int i = 0; i < (int) (num.freq * count); i++) {
+                cells.push_back(num.value);
+            }
+        }
+        int zeros = count - cells.size();
+        for (int i = 0; i < zeros; i++) {
+            cells.push_back(0);
+        }
+        return cells;
+    }
+
+    void newGame(int rowCount, int colCount, int diff) {
+        srand(std::time(nullptr));
+        field = new Cell *[rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            field[i] = new Cell[colCount];
+        }
+        vector<int> cells = genNumbers(rowCount, colCount, diff);
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                int curValueInd = rand() % cells.size();
+                CellState curState = (cells[curValueInd] == 0)
+                                     ? FREE
+                                     : MOVABLE;
+                field[r][c] = Cell(curState, cells[curValueInd]);
+                auto it = cells.begin();
+                for (int i = 0; i < curValueInd; i++) {
+                    it++;
+                }
+                cells.erase(it);
+            }
+        }
+
+        updateMoves(rowCount, colCount);
+        int points = 0;
+        prevField = new Cell *[rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            prevField[i] = new Cell[colCount];
+        }
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                prevField[r][c] = field[r][c].clone();
+                prevField[r][c].setSelected(false);
+            }
+        }
+        state = PLAYING;
+    }
+
+    void restartGame(int rowCount, int colCount) {
+        field = new Cell *[rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            field[i] = new Cell[colCount];
+        }
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                field[r][c] = prevField[r][c].clone();
+                field[r][c].setDest(false);
+                field[r][c].setSelected(false);
+            }
+        }
+
+        updateMoves(rowCount, colCount);
+        int points = 0;
+        state = PLAYING;
+    }
+
+    void leftMouseClick(int row, int col) {
+        int rowCount = getRowCount(), colCount = getColCount();
+        if (row < 0 || row >= rowCount || col < 0 || col >= colCount) {
+            return;
+        }
+        if (field[row][col].isDest()) {
+            field[row][col] = selectedCell.clone();
+            field[row][col].setState(MOVED);
+            selectedCell.setState(FREE);
+            selectedCell.setNumber(0);
+            points++;
+        }
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                field[r][c].setDest(false);
+                field[r][c].setSelected(false);
+            }
+        }
+        if (field[row][col].getState() == MOVABLE) {
+            selectedCell = field[row][col];
+            field[row][col].setSelected(true);
+            for (Point p: field[row][col].moves) {
+                field[p.row][p.col].setDest(true);
+            }
+        }
+        updateMoves(rowCount, colCount);
+        calcState();
+    }
+
+    Cell getCell(int row, int col) {
+        int rowCount = getRowCount(), colCount = getColCount();
+        if (row < 0 || row >= rowCount || col < 0 || col >= colCount) {
+            return nullCell;
+        }
+        return field[row][col];
+    }
+
+    GameState getState() {
+        return state;
+    }
+
 };
