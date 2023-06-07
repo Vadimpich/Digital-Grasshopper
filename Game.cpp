@@ -1,8 +1,6 @@
 #include "Game.h"
 
-std::vector<Game::Point> Game::getMoves(int row, int col) {
-    int rowCount = getRowCount();
-    int colCount = getColCount();
+std::vector<Game::Point> Game::getMoves(int row, int col) const {
     std::vector<Point> moves = std::vector<Point>();
     int step = field[row][col].getNumber();
     for (int i = -1; i <= 1; i++) {
@@ -21,7 +19,7 @@ std::vector<Game::Point> Game::getMoves(int row, int col) {
     return moves;
 }
 
-void Game::updateMoves(int rowCount, int colCount) {
+void Game::updateMoves() const {
     for (int r = 0; r < rowCount; r++) {
         for (int c = 0; c < colCount; c++) {
             field[r][c].setMoves(getMoves(r, c));
@@ -30,8 +28,6 @@ void Game::updateMoves(int rowCount, int colCount) {
 }
 
 void Game::calcState() {
-    int rowCount = getRowCount();
-    int colCount = getColCount();
     bool noMoves = true, allMoved = true;
     for (int r = 0; r < rowCount; r++) {
         for (int c = 0; c < colCount; c++) {
@@ -54,7 +50,7 @@ void Game::calcState() {
 }
 
 
-std::vector<int> Game::genNumbers(int rowCount, int colCount, int diff) {
+std::vector<int> Game::genNumbers(int diff) const {
     std::vector<int> cells = std::vector<int>();
     std::vector<Number> numbers = std::vector<Number>();
     int count = rowCount * colCount;
@@ -91,16 +87,18 @@ std::vector<int> Game::genNumbers(int rowCount, int colCount, int diff) {
     return cells;
 }
 
-void Game::newGame(int rowCount, int colCount, int diff) {
+void Game::newGame(int rCount, int cCount, int diff) {
+    this->rowCount = rCount;
+    this->colCount = cCount;
     points = 0;
     srand(std::time(nullptr));
-    field = new Cell *[rowCount];
-    for (int i = 0; i < rowCount; i++) {
-        field[i] = new Cell[colCount];
+    field = new Cell *[rCount];
+    for (int i = 0; i < rCount; i++) {
+        field[i] = new Cell[cCount];
     }
-    std::vector<int> cells = genNumbers(rowCount, colCount, diff);
-    for (int r = 0; r < rowCount; r++) {
-        for (int c = 0; c < colCount; c++) {
+    std::vector<int> cells = genNumbers(diff);
+    for (int r = 0; r < rCount; r++) {
+        for (int c = 0; c < cCount; c++) {
             size_t curValueInd = rand() % cells.size();
             CellState curState = (cells[curValueInd] == 0)
                                  ? FREE
@@ -114,20 +112,20 @@ void Game::newGame(int rowCount, int colCount, int diff) {
         }
     }
 
-    updateMoves(rowCount, colCount);
-    prevField = new Cell *[rowCount];
-    for (int i = 0; i < rowCount; i++) {
-        prevField[i] = new Cell[colCount];
+    updateMoves();
+    prevField = new Cell *[rCount];
+    for (int i = 0; i < rCount; i++) {
+        prevField[i] = new Cell[cCount];
     }
-    for (int r = 0; r < rowCount; r++) {
-        for (int c = 0; c < colCount; c++) {
+    for (int r = 0; r < rCount; r++) {
+        for (int c = 0; c < cCount; c++) {
             prevField[r][c] = field[r][c].clone();
         }
     }
     state = PLAYING;
 }
 
-void Game::restartGame(int rowCount, int colCount) {
+void Game::restartGame() {
     points = 0;
     field = new Cell *[rowCount];
     for (int i = 0; i < rowCount; i++) {
@@ -140,12 +138,11 @@ void Game::restartGame(int rowCount, int colCount) {
         }
     }
 
-    updateMoves(rowCount, colCount);
+    updateMoves();
     state = PLAYING;
 }
 
 void Game::leftMouseClick(int row, int col) {
-    int rowCount = getRowCount(), colCount = getColCount();
     if (field[row][col].isDest()) {
         field[row][col] = field[selectedCell.row][selectedCell.col].clone();
         field[row][col].setState(MOVED);
@@ -164,7 +161,7 @@ void Game::leftMouseClick(int row, int col) {
             field[p.row][p.col].setDest(true);
         }
     }
-    updateMoves(rowCount, colCount);
+    updateMoves();
     calcState();
 }
 

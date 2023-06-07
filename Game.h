@@ -48,7 +48,7 @@ public:
             this->number = number;
         }
 
-        void setMoves(const std::vector<Point>& m) {
+        void setMoves(const std::vector<Point> &m) {
             this->moves = m;
         }
 
@@ -95,32 +95,24 @@ public:
     };
 
     GameState state = MENU;
+    int rowCount = 0, colCount = 0;
     int points = 0;
     Cell **field{};
     Cell **prevField{};
     Point selectedCell{-1, -1};
     Cell nullCell = Cell();
 
+    std::vector<Point> getMoves(int row, int col) const;
 
-    int getRowCount() {
-        return 6;
-    }
-
-    int getColCount() {
-        return 6;
-    }
-
-    std::vector<Point> getMoves(int row, int col);
-
-    void updateMoves(int rowCount, int colCount);
+    void updateMoves() const;
 
     void calcState();
 
-    static std::vector<int> genNumbers(int rowCount, int colCount, int diff);
+    std::vector<int> genNumbers(int diff) const;
 
-    void newGame(int rowCount, int colCount, int diff);
+    void newGame(int rCount, int cCount, int diff);
 
-    void restartGame(int rowCount, int colCount);
+    void restartGame();
 
     void leftMouseClick(int row, int col);
 

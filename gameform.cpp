@@ -221,10 +221,7 @@ void GameForm::onNewGameClicked() {
 }
 
 void GameForm::onRestartClicked() {
-    game.restartGame(
-            params.rowCount,
-            params.colCount
-    );
+    game.restartGame();
     ui->lcdNumber->display(0);
     ui->lcdNumber_2->display(0);
     updateTable();
