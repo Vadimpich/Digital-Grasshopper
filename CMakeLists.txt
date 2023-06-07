@@ -19,6 +19,10 @@ set(QRC_FILE res.qrc)
 
 qt5_add_resources(QRC_SOURCES ${QRC_FILE})
 
+if(WIN32)
+    set(CMAKE_WIN32_EXECUTABLE ON)
+endif()
+
 set(PROJECT_SOURCES
         main.cpp
         dialog.h
@@ -53,6 +57,10 @@ else()
     endif()
 endif()
 
+if(WIN32)
+    set(CMAKE_WIN32_EXECUTABLE ON)
+endif()
+
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/resources")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/db.sqlite3
@@ -73,3 +81,5 @@ set_target_properties(digigrass PROPERTIES
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(digigrass)
 endif()
+
+

@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
-		<file alias="icon.png">resources/icon.png</file>
-		<file alias="bnb.ttf">resources/bnb.ttf</file>
-		<file alias="bnr.ttf">resources/bnr.ttf</file>
-		<file alias="golos-ui_regular.ttf">resources/golos-ui_regular.ttf</file>
+        <file alias="icon.png">resources/icon.png</file>
+        <file alias="bnb.ttf">resources/bnb.ttf</file>
+        <file alias="bnr.ttf">resources/bnr.ttf</file>
+        <file alias="golos-ui_regular.ttf">resources/golos-ui_regular.ttf</file>
     </qresource>
 </RCC>

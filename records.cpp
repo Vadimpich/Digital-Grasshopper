@@ -22,6 +22,8 @@ Records::Records(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    initDB();
+
     newQuery();
 
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
@@ -106,5 +108,20 @@ void Records::newRecord(int s, int d, int t) {
 
     if (!query.exec(q)) {
         qDebug() << "Insert error";
+    }
+}
+
+void Records::initDB() {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("db.sqlite3");
+    if (!db.open()) {
+        qDebug() << "Open db error";
+    }
+
+    QSqlQuery query;
+    QString q = "CREATE TABLE IF NOT EXISTS Records"
+                "(size INTEGER, diff INTEGER, time REAL);";
+    if (!query.exec(q)) {
+        qDebug() << "Creation error";
     }
 }

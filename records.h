@@ -23,6 +23,8 @@ private:
     void updateDb(int s = 0, int d = 0);
 
     void newQuery();
+
+    void initDB();
 };
 
 #endif // RECORDS_H

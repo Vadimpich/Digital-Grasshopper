@@ -136,7 +136,7 @@ GameForm::GameForm(QWidget *parent)
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setItemDelegate(new CustomDelegate);
 
-    int id = QFontDatabase::addApplicationFont("bnb.ttf");
+    int id = QFontDatabase::addApplicationFont(":/bnb.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     bnb = QFont(family);
     bnb.setPointSize(36);
