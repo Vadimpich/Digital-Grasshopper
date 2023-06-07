@@ -15,6 +15,10 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
+set(QRC_FILE res.qrc)
+
+qt5_add_resources(QRC_SOURCES ${QRC_FILE})
+
 set(PROJECT_SOURCES
         main.cpp
         dialog.h
@@ -22,6 +26,7 @@ set(PROJECT_SOURCES
         gameform.cpp
         gameform.h
         gameform.ui
+        ${QRC_SOURCES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -43,6 +48,7 @@ else()
     else()
         add_executable(digigrass
             ${PROJECT_SOURCES}
+                ${QT_RESOURCE_SOURCES}
         )
     endif()
 endif()
@@ -50,14 +56,6 @@ endif()
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/resources")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/db.sqlite3
-        ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/icon.png
-        ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/golos-ui_regular.ttf
-        ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/bnb.ttf
-        ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/bnr.ttf
         ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
 target_link_libraries(digigrass PRIVATE
