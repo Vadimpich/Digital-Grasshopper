@@ -24,7 +24,7 @@ private:
 
     void newQuery();
 
-    void initDB();
+    static void initDB();
 };
 
 #endif // RECORDS_H

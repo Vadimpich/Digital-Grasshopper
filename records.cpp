@@ -95,6 +95,8 @@ void Records::newQuery() {
 }
 
 void Records::newRecord(int s, int d, int t) {
+    initDB();
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("db.sqlite3");
     if (!db.open()) {
